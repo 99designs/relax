@@ -76,7 +76,7 @@ class Relax_Client_Collection implements ArrayAccess, Countable, IteratorAggrega
 	{
 		if(!$this->_arrayObject()->offsetExists(0))
 		{
-			throw new Relax_Client_Error_ResourceNotFound(
+			throw new Relax_Client_Error(
 				"No resources in collection $this->_path");
 		}
 
