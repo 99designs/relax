@@ -21,7 +21,7 @@ class Relax_Openssl_PublicKey
 		$key = $this->_getKeyResource();
 		if(openssl_seal($data, $sealed, $ekeys, array($key)) === false)
 		{
-			throw new Relax_Client_Openssl_Exception("Error sealing: ".openssl_error_string());
+			throw new Relax_Openssl_Exception("Error sealing: ".openssl_error_string());
 		}
 
 		return array($sealed,$ekeys[0]);
@@ -42,7 +42,7 @@ class Relax_Openssl_PublicKey
 	{
 		if(!is_file($this->_path))
 		{
-			throw new Relax_Client_Openssl_Exception("Invalid public key: $this->_path");
+			throw new Relax_Openssl_Exception("Invalid public key: $this->_path");
 		}
 
 		return openssl_pkey_get_public(file_get_contents($this->_path));

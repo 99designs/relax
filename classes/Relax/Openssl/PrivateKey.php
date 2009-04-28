@@ -21,7 +21,7 @@ class Relax_Openssl_PrivateKey
 		$key = $this->_getKeyResource();
 		if(!openssl_open($data, $open, $envelopeKey, $key))
 		{
-			throw new Relax_Client_Openssl_Exception("Error unsealing data: ".openssl_error_string());
+			throw new Relax_Openssl_Exception("Error unsealing data: ".openssl_error_string());
 		}
 
 		return $open;
@@ -32,7 +32,7 @@ class Relax_Openssl_PrivateKey
 		$key = $this->_getKeyResource();
 		if(!openssl_sign($data, $hash, $key, $algorithm))
 		{
-			throw new Relax_Client_Openssl_Exception("Error signing data: ".openssl_error_string());
+			throw new Relax_Openssl_Exception("Error signing data: ".openssl_error_string());
 		}
 
 		return $hash;
@@ -42,7 +42,7 @@ class Relax_Openssl_PrivateKey
 	{
 		if(!is_file($this->_path))
 		{
-			throw new Relax_Client_Openssl_Exception("Invalid private key: $this->_path");
+			throw new Relax_Openssl_Exception("Invalid private key: $this->_path");
 		}
 
 		return openssl_pkey_get_private(file_get_contents($this->_path));

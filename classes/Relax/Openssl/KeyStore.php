@@ -27,7 +27,7 @@ class Relax_Openssl_KeyStore
 		}
 		else
 		{
-			throw new Relax_Client_Openssl_Exception("$dir doesn't exist");
+			throw new Relax_Openssl_Exception("$dir doesn't exist");
 		}
 	}
 
@@ -38,7 +38,7 @@ class Relax_Openssl_KeyStore
 	{
 		if(!isset($this->_keys[$keyid]))
 		{
-			throw new Relax_Client_Openssl_Exception("No key with the id $keyid");
+			throw new Relax_Openssl_Exception("No key with the id $keyid");
 		}
 
 		return new Relax_Client_Openssl_PublicKey($this->_keys[$keyid], $keyid);
