@@ -7,7 +7,7 @@ Mock::generate('Relax_Openssl_PrivateKey','Relax_Openssl_MockPrivateKey');
 /**
  * @author Lachlan Donald <lachlan@99designs.com>
  */
-class Relax_Client_OpensslTest extends UnitTestCase
+class Relax_OpensslTest extends UnitTestCase
 {
 	public function setUp()
 	{

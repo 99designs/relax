@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A collection of {@link Relax_Client_Openssl_PublicKey} objects based on a
+ * A collection of {@link Relax_Openssl_PublicKey} objects based on a
  * directory of pem encoded public key files. The base filename is used
  * as the keyid. A single filename can also be passed.
  */
@@ -41,6 +41,6 @@ class Relax_Openssl_KeyStore
 			throw new Relax_Openssl_Exception("No key with the id $keyid");
 		}
 
-		return new Relax_Client_Openssl_PublicKey($this->_keys[$keyid], $keyid);
+		return new Relax_Openssl_PublicKey($this->_keys[$keyid], $keyid);
 	}
 }

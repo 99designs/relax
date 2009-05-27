@@ -13,8 +13,8 @@ class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
 	private $_keyStore;
 
 	/**
-	 * @param $privateKey Relax_Client_Openssl_PrivateKey
-	 * @param $keyStore Relax_Client_Openssl_KeyStore
+	 * @param $privateKey Relax_Openssl_PrivateKey
+	 * @param $keyStore Relax_Openssl_KeyStore
 	 */
 	function __construct($privateKey, $keyStore=null, $timestamp=false)
 	{
@@ -48,7 +48,7 @@ class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
 	{
 		if(!is_object($this->_keyStore))
 		{
-			throw new Relax_Client_Openssl_SigningException("No keystore available to verify against",500);
+			throw new Relax_Openssl_SigningException("No keystore available to verify against",500);
 		}
 
 		$publicKey = $this->_keyStore->get($this->_keyValue($headers,'X-Signature-Key'));
@@ -58,7 +58,7 @@ class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
 		// verify it
 		if(!$publicKey->verify($data, $hash))
 		{
-			throw new Relax_Client_Openssl_SigningException("Invalid request signature",401);
+			throw new Relax_Openssl_SigningException("Invalid request signature",401);
 		}
 
 		return false;
@@ -75,14 +75,14 @@ class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
 		// validate expires parameter isn't in the far future
 		if(($expires - $time) >= self::FUTURE_SANITY_THRESHOLD)
 		{
-			throw new Relax_Client_Openssl_SigningException(
+			throw new Relax_Openssl_SigningException(
 				"Expiry time is too far in the future",400);
 		}
 
 		// validate expires parameter isn't past
 		if($time > $expires)
 		{
-			throw new Relax_Client_Openssl_SigningException(
+			throw new Relax_Openssl_SigningException(
 				"Request is expired",400);
 		}
 	}
@@ -116,7 +116,7 @@ class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
 			if(strcasecmp($key, $headerKey) == 0) return trim($headerValue);
 		}
 
-		throw new Relax_Client_Openssl_SigningException("Missing signature header: $key");
+		throw new Relax_Openssl_SigningException("Missing signature header: $key");
 	}
 
 	/* (non-phpdoc)
