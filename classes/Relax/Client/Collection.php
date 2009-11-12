@@ -27,9 +27,10 @@ class Relax_Client_Collection implements ArrayAccess, Countable, IteratorAggrega
 	 * Creates a new resource from provided data, which can be either an array
 	 * or object
 	 *
+	 * @param array $data
 	 * @return object the created resource
 	 */
-	function create($data)
+	function create($data = array())
 	{
 		$result = $this->_node->connection()->post($this->_path,(object)$data);
 		$idProperty = self::ID_KEY;
