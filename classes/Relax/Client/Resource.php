@@ -113,12 +113,14 @@ class Relax_Client_Resource
 	/**
 	 * Imports any iteratable object into the resource
 	 */
-	public function import($mixed)
+	public function import($mixed, $markLoaded=false)
 	{
 		foreach($mixed as $key=>$value)
 		{
 			$this->$key = $value;
 		}
+
+		if($markLoaded) $this->_loaded = true;
 		return $this;
 	}
 

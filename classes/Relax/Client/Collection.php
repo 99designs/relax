@@ -126,7 +126,7 @@ class Relax_Client_Collection implements ArrayAccess, Countable, IteratorAggrega
 				}
 
 				$resource = $this->_node->resource($this->_path, $object->$idProperty);
-				$array[]= $resource->import($object);
+				$array[]= $resource->import($object, true);
 			}
 			$this->_loaded = true;
 			$this->_data = new ArrayObject($array);
