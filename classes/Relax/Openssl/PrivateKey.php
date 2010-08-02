@@ -4,11 +4,13 @@ class Relax_Openssl_PrivateKey
 {
 	private $_path;
 	private $_keyId;
+	private $_passphrase;
 
-	function __construct($path, $keyId=false)
+	function __construct($path, $keyId=false, $passphrase=NULL)
 	{
 		$this->_path = $path;
 		$this->_keyId = $keyId;
+		$this->_passphrase = $passphrase;
 	}
 
 	function getKeyId()
@@ -45,6 +47,6 @@ class Relax_Openssl_PrivateKey
 			throw new Relax_Openssl_Exception("Invalid private key: $this->_path");
 		}
 
-		return openssl_pkey_get_private(file_get_contents($this->_path));
+		return openssl_pkey_get_private(file_get_contents($this->_path), $this->_passphrase);
 	}
 }
