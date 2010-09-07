@@ -38,6 +38,11 @@ class Relax_Client_PathCache implements Relax_Client_Connection
 		}
 	}
 
+	public function clearPathCache()
+	{
+		$this->_cache = array();
+	}
+
 	// ---- All other operations invalidate the cache...
 
 	/* (non-phpdoc)
@@ -45,7 +50,7 @@ class Relax_Client_PathCache implements Relax_Client_Connection
 	 */
 	function delete($path)
 	{
-		$this->_cache = array();
+		$this->clearPathCache();
 		return $this->_connection->delete($path);
 	}
 	/* (non-phpdoc)
@@ -53,7 +58,7 @@ class Relax_Client_PathCache implements Relax_Client_Connection
 	 */
 	function put($path, $body)
 	{
-		$this->_cache = array();
+		$this->clearPathCache();
 		return $this->_connection->put($path, $body);
 	}
 
@@ -62,7 +67,7 @@ class Relax_Client_PathCache implements Relax_Client_Connection
 	 */
 	function post($path, $body)
 	{
-		$this->_cache = array();
+		$this->clearPathCache();
 		return $this->_connection->post($path, $body);
 	}
 }
