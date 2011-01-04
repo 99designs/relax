@@ -90,7 +90,7 @@ class Relax_Client_Resource
 	 */
 	public function get($prop)
 	{
-		if(!$this->__isset($prop))
+		if(!$this->_exists($prop))
 		{
 			throw new BadMethodCallException("Property $prop doesn't exist");
 		}
@@ -192,16 +192,16 @@ class Relax_Client_Resource
 	}
 
 	/**
-	 * Magic method, determines whether the property exists
+	 * Magic method, determines whether the property is set
 	 */
 	function __isset($prop)
 	{
-		if(!$this->_loaded && !property_exists($this->_data, $prop))
+		if(!$this->_loaded && !isset($this->_data->$prop))
 		{
 			$this->load();
 		}
 
-		return property_exists($this->_data, $prop);
+		return isset($this->_data->$prop);
 	}
 
 	/**
@@ -210,5 +210,18 @@ class Relax_Client_Resource
 	function __unset($prop)
 	{
 		unset($this->_data->$prop);
+	}
+
+	/**
+	 * Determines whether the property exists
+	 */
+	function _exists($prop)
+	{
+		if(!$this->_loaded && !property_exists($this->_data, $prop))
+		{
+			$this->load();
+		}
+
+		return property_exists($this->_data, $prop);
 	}
 }
