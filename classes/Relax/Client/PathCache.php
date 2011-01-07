@@ -31,10 +31,14 @@ class Relax_Client_PathCache implements Relax_Client_Connection
 	private function _cache($base, $obj)
 	{
 		$this->_cache[$base] = $obj;
-		foreach ($obj as $k => $v)
+
+		if(is_array($obj) || is_object($obj))
 		{
-			if (is_array($v) || is_object($v))
-				$this->_cache("$base/$k", $v);
+			foreach ($obj as $k => $v)
+			{
+				if (is_array($v) || is_object($v))
+					$this->_cache("$base/$k", $v);
+			}
 		}
 	}
 
