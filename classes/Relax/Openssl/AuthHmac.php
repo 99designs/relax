@@ -53,7 +53,7 @@ class Relax_Openssl_AuthHmac implements Ergo_Http_ClientFilter
 	// @see Ergo_Http_ClientFilter
 	public function response($response)
 	{
-		throw new BadMethodCallException(__METHOD__ . " not implemented");
+		return $response;
 	}
 
 	// ----------------------------------------
