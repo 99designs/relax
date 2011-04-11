@@ -48,6 +48,15 @@ class Relax_Client_ArrayConnection implements Relax_Client_Connection
 
 		$data->id = $id = $this->_nextId($path);
 		$this->put(ltrim("$path/$id",'/'),$data);
+
+		// Update the collection too
+		$collection = isset($this->_data[$path])
+			? $this->_data[$path]
+			: array();
+
+		$collection[] = $data;
+		$this->_data[$path] = $collection;
+
 		return $data;
 	}
 
