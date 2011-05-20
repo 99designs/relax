@@ -14,6 +14,7 @@ class Relax_Client_ArrayConnection implements Relax_Client_Connection
 	function inject($path, $data)
 	{
 		$this->_data[$path] = $data;
+		return $this;
 	}
 
 	/**
