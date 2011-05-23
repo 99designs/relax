@@ -6,7 +6,7 @@
  */
 class Relax_Client_ArrayConnection implements Relax_Client_Connection
 {
-	private $_data=array();
+	protected $_data=array();
 
 	/**
 	 * Injects data to a particular path without any constraints
