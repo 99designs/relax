@@ -4,7 +4,7 @@
  * Signs a request's components using a public key. Throws signing exceptions
  * for requests that aren't valid.
  */
-class Relax_Openssl_Signer implements Ergo_Http_ClientFilter
+class Relax_Openssl_Signer implements \Ergo\Http\ClientFilter
 {
 	const FUTURE_SANITY_THRESHOLD=5000;
 

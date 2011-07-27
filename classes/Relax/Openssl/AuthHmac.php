@@ -7,7 +7,7 @@
  * @see http://auth-hmac.rubyforge.org/
  * @author Paul Annesley
  */
-class Relax_Openssl_AuthHmac implements Ergo_Http_ClientFilter
+class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
 {
 	const HEADER_NAME = 'Authorization';
 	const SERVICE_ID = 'AuthHMAC';
@@ -27,11 +27,11 @@ class Relax_Openssl_AuthHmac implements Ergo_Http_ClientFilter
 	}
 
 	// ----------------------------------------
-	// Ergo_Http_ClientFilter interface
+	// \Ergo\Http\ClientFilter interface
 
 	/**
 	 * Signs an outbound request.
-	 * @see Ergo_Http_ClientFilter
+	 * @see \Ergo\Http\ClientFilter
 	 */
 	public function request($request)
 	{
@@ -42,7 +42,7 @@ class Relax_Openssl_AuthHmac implements Ergo_Http_ClientFilter
 
 		$signature = $this->_signature_for_request($request, $secret);
 
-		$request->getHeaders()->add(new Ergo_Http_HeaderField(
+		$request->getHeaders()->add(new \Ergo\Http\HeaderField(
 			self::HEADER_NAME,
 			sprintf('%s %s:%s', self::SERVICE_ID, $this->_access_id, $signature)
 		));
@@ -50,7 +50,7 @@ class Relax_Openssl_AuthHmac implements Ergo_Http_ClientFilter
 		return $request;
 	}
 
-	// @see Ergo_Http_ClientFilter
+	// @see \Ergo\Http\ClientFilter
 	public function response($response)
 	{
 		return $response;

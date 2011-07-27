@@ -72,9 +72,9 @@ class Relax_Client_AuthHmacTest extends UnitTestCase
 		$headers = array('Content-Type: application/json');
 		if ($body) $headers []= sprintf('Content-MD5: %s', md5($body));
 
-		return new Ergo_Http_Request(
+		return new \Ergo\Http\Request(
 			$method,
-			new Ergo_Http_Url("http://example.org$path"),
+			new \Ergo\Http\Url("http://example.org$path"),
 			$headers,
 			$body
 		);
