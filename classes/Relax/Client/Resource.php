@@ -141,6 +141,7 @@ class Relax_Client_Resource
 		foreach(func_get_args() as $arg)
 		{
 			$components = array_merge($components,explode('/',$arg));
+			$components = array_map('urlencode', $components);
 		}
 
 		return implode('/',array_filter($components));
