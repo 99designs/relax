@@ -1,0 +1,10 @@
+{
+	"name": "99designs/relax",
+	"description": "A library for building simple REST services in PHP5.",
+	"require": {
+		"php": ">=5.3"
+	},
+	"autoload": {
+		"psr-0": { "Relax": "classes" }
+	}
+}
