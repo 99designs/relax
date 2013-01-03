@@ -7,6 +7,9 @@ class Relax_Client_HttpConnection implements Relax_Client_Connection
 {
 	private $_client;
 
+	/**
+	 * Takes an Ergo/Http/Client
+	 */
 	public function __construct($client)
 	{
 		$this->_client = clone $client;
