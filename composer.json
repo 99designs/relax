@@ -1,6 +1,6 @@
 {
 	"name": "99designs/relax",
-	"description": "A library for building simple REST services in PHP5.",
+	"description": "A library for consuming simple REST services in PHP5.",
 	"license": "MIT",
 	"require": {
 		"php": ">=5.3",
