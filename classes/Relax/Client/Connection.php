@@ -7,32 +7,31 @@
  */
 interface Relax_Client_Connection
 {
-	/**
-	 * Puts an object to a particular path. The object must have an id property.
-	 *
-	 * @param $path string the path to the resource
-	 * @param $body mixed the body content
-	 */
-	function put($path, $body);
+    /**
+     * Puts an object to a particular path. The object must have an id property.
+     *
+     * @param $path string the path to the resource
+     * @param $body mixed the body content
+     */
+    public function put($path, $body);
 
-	/**
-	 * Posts a new object to a collection path. An id property will be generated.
-	 *
-	 * @param $path string the path to the resource
-	 * @param $body mixed the body content
-	 */
-	function post($path, $body);
+    /**
+     * Posts a new object to a collection path. An id property will be generated.
+     *
+     * @param $path string the path to the resource
+     * @param $body mixed the body content
+     */
+    public function post($path, $body);
 
-	/**
-	 * Gets an object from a collection path.
-	 *
-	 * @param $path string the path to the resource
-	 */
-	function get($path);
+    /**
+     * Gets an object from a collection path.
+     *
+     * @param $path string the path to the resource
+     */
+    public function get($path);
 
-	/**
-	 * Deletes an object or collection from a particular path.
-	 */
-	function delete($path);
+    /**
+     * Deletes an object or collection from a particular path.
+     */
+    public function delete($path);
 }
-

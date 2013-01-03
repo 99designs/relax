@@ -6,98 +6,94 @@
  */
 class Relax_Client_ArrayConnection implements Relax_Client_Connection
 {
-	protected $_data=array();
+    protected $_data=array();
 
-	/**
-	 * Injects data to a particular path without any constraints
-	 */
-	function inject($path, $data)
-	{
-		$this->_data[$path] = $data;
-		return $this;
-	}
+    /**
+     * Injects data to a particular path without any constraints
+     */
+    public function inject($path, $data)
+    {
+        $this->_data[$path] = $data;
 
-	/**
-	 * Calculates the next highest identifier for a path
-	 *
-	 * @return int the next highest identifier
-	 */
-	private function _nextId($path)
-	{
-		$id = 0;
+        return $this;
+    }
 
-		foreach($this->_data as $resourcePath=>$resource)
-		{
-			if($path == dirname($resourcePath) && $resource->id > $id)
-			{
-				$id = $resource->id;
-			}
-		}
+    /**
+     * Calculates the next highest identifier for a path
+     *
+     * @return int the next highest identifier
+     */
+    private function _nextId($path)
+    {
+        $id = 0;
 
-		return $id + 1;
-	}
+        foreach ($this->_data as $resourcePath=>$resource) {
+            if ($path == dirname($resourcePath) && $resource->id > $id) {
+                $id = $resource->id;
+            }
+        }
 
-	/* (non-phpdoc)
-	 * @see Relax_Client_Connection::post
-	 */
-	function post($path, $data)
-	{
-		if(!is_object($data))
-		{
-			throw new Relax_Client_Error("Data must be in object form");
-		}
+        return $id + 1;
+    }
 
-		$data->id = $id = $this->_nextId($path);
-		$this->put(ltrim("$path/$id",'/'),$data);
+    /* (non-phpdoc)
+     * @see Relax_Client_Connection::post
+     */
+    public function post($path, $data)
+    {
+        if (!is_object($data)) {
+            throw new Relax_Client_Error("Data must be in object form");
+        }
 
-		// Update the collection too
-		$collection = isset($this->_data[$path])
-			? $this->_data[$path]
-			: array();
+        $data->id = $id = $this->_nextId($path);
+        $this->put(ltrim("$path/$id",'/'),$data);
 
-		$collection[] = $data;
-		$this->_data[$path] = $collection;
+        // Update the collection too
+        $collection = isset($this->_data[$path])
+            ? $this->_data[$path]
+            : array();
 
-		return $data;
-	}
+        $collection[] = $data;
+        $this->_data[$path] = $collection;
 
-	/* (non-phpdoc)
-	 * @see Relax_Client_Connection::put
-	 */
-	function put($path, $data)
-	{
-		if(!is_object($data))
-		{
-			throw new Relax_Client_Error("Data must be in object form");
-		}
+        return $data;
+    }
 
-		$this->_data[$path] = $data;
-		return $data;
-	}
+    /* (non-phpdoc)
+     * @see Relax_Client_Connection::put
+     */
+    public function put($path, $data)
+    {
+        if (!is_object($data)) {
+            throw new Relax_Client_Error("Data must be in object form");
+        }
 
-	/* (non-phpdoc)
-	 * @see Relax_Client_Connection::get
-	 */
-	function get($path)
-	{
-		if(!isset($this->_data[$path]))
-		{
-			throw new Relax_Client_Error("$path doesn't exist");
-		}
+        $this->_data[$path] = $data;
 
-		return $this->_data[$path];
-	}
+        return $data;
+    }
 
-	/* (non-phpdoc)
-	 * @see Relax_Client_Connection::delete
-	 */
-	function delete($path)
-	{
-		if(!isset($this->_data[$path]))
-		{
-			throw new Relax_Client_Error("$path doesn't exist");
-		}
-		return $this;
-	}
+    /* (non-phpdoc)
+     * @see Relax_Client_Connection::get
+     */
+    public function get($path)
+    {
+        if (!isset($this->_data[$path])) {
+            throw new Relax_Client_Error("$path doesn't exist");
+        }
+
+        return $this->_data[$path];
+    }
+
+    /* (non-phpdoc)
+     * @see Relax_Client_Connection::delete
+     */
+    public function delete($path)
+    {
+        if (!isset($this->_data[$path])) {
+            throw new Relax_Client_Error("$path doesn't exist");
+        }
+
+        return $this;
+    }
 }
-

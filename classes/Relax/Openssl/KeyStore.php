@@ -7,40 +7,33 @@
  */
 class Relax_Openssl_KeyStore
 {
-	private $_keys=array();
+    private $_keys=array();
 
-	/**
-	 * Constructs
-	 */
-	function __construct($dir)
-	{
-		if(is_file($dir))
-		{
-			$this->_keys[substr(basename($dir),0,-4)] = $dir;
-		}
-		else if(is_dir($dir))
-		{
-			foreach(glob("{$dir}*.pem") as $file)
-			{
-				$this->_keys[substr(basename($file),0,-4)] = $file;
-			}
-		}
-		else
-		{
-			throw new Relax_Openssl_Exception("$dir doesn't exist");
-		}
-	}
+    /**
+     * Constructs
+     */
+    public function __construct($dir)
+    {
+        if (is_file($dir)) {
+            $this->_keys[substr(basename($dir),0,-4)] = $dir;
+        } elseif (is_dir($dir)) {
+            foreach (glob("{$dir}*.pem") as $file) {
+                $this->_keys[substr(basename($file),0,-4)] = $file;
+            }
+        } else {
+            throw new Relax_Openssl_Exception("$dir doesn't exist");
+        }
+    }
 
-	/**
-	 * Get a public key by keyid
-	 */
-	function get($keyid)
-	{
-		if(!isset($this->_keys[$keyid]))
-		{
-			throw new Relax_Openssl_Exception("No key with the id $keyid");
-		}
+    /**
+     * Get a public key by keyid
+     */
+    public function get($keyid)
+    {
+        if (!isset($this->_keys[$keyid])) {
+            throw new Relax_Openssl_Exception("No key with the id $keyid");
+        }
 
-		return new Relax_Openssl_PublicKey($this->_keys[$keyid], $keyid);
-	}
+        return new Relax_Openssl_PublicKey($this->_keys[$keyid], $keyid);
+    }
 }
