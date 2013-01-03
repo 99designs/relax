@@ -3,7 +3,7 @@
 /**
  * @author Lachlan Donald <lachlan@99designs.com>
  */
-class Relax_Client_ModelTest extends UnitTestCase
+class Relax_Client_ModelTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
@@ -29,11 +29,11 @@ class Relax_Client_ModelTest extends UnitTestCase
 		$items = $model->transactions(1)->items();
 		$address = $model->customers(1)->address();
 
-		$this->assertIsA($address,'Relax_Client_Resource');
-		$this->assertIsA($items,'Relax_Client_Collection');
+		$this->assertInstanceOf('Relax_Client_Resource', $address);
+		$this->assertInstanceOf('Relax_Client_Collection', $items);
 
-		$this->assertEqual($address->url(), 'customers/1/address');
-		$this->assertEqual($items->url(), 'transactions/1/items');
+		$this->assertEquals($address->url(), 'customers/1/address');
+		$this->assertEquals($items->url(), 'transactions/1/items');
 	}
 
 	public function testCreatingResource()
@@ -50,13 +50,13 @@ class Relax_Client_ModelTest extends UnitTestCase
 		$customer1 = $model->customers()->create(array('i'=>'x'));
 		$customer2 = $model->customers()->create(array('i'=>'y'));
 
-		$this->assertEqual($customer1->id, 1);
-		$this->assertEqual($customer2->id, 2);
+		$this->assertEquals($customer1->id, 1);
+		$this->assertEquals($customer2->id, 2);
 
-		$this->assertEqual($model->customers(1)->id, 1);
-		$this->assertEqual($model->customers(1)->i,'x');
-		$this->assertEqual($model->customers(2)->id, 2);
-		$this->assertEqual($model->customers(2)->i,'y');
+		$this->assertEquals($model->customers(1)->id, 1);
+		$this->assertEquals($model->customers(1)->i,'x');
+		$this->assertEquals($model->customers(2)->id, 2);
+		$this->assertEquals($model->customers(2)->i,'y');
 	}
 
 	public function testRoundTrip()
@@ -76,14 +76,14 @@ class Relax_Client_ModelTest extends UnitTestCase
 				'street'=>'Oriel Rd'
 				));
 
-		$this->assertEqual($model->customers(1)->name,'Lachlan');
-		$this->assertEqual($model->customers(1)->addresses(1)->street,'Oriel Rd');
+		$this->assertEquals($model->customers(1)->name,'Lachlan');
+		$this->assertEquals($model->customers(1)->addresses(1)->street,'Oriel Rd');
 
 		$model->customers(1)->set('name','Fred')->save();
 		$model->customers(1)->addresses(1)->set('street','Some St')->save();
 
-		$this->assertEqual($model->customers(1)->name,'Fred');
-		$this->assertEqual($model->customers(1)->addresses(1)->street,'Some St');
+		$this->assertEquals($model->customers(1)->name,'Fred');
+		$this->assertEquals($model->customers(1)->addresses(1)->street,'Some St');
 	}
 }
 

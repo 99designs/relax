@@ -3,7 +3,7 @@
 /**
  * @author Lachlan Donald <lachlan@99designs.com>
  */
-class Relax_Client_NodeTest extends UnitTestCase
+class Relax_Client_NodeTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
@@ -15,8 +15,8 @@ class Relax_Client_NodeTest extends UnitTestCase
 		$node = new Relax_Client_Model('Root',$this->connection);
 		$node->hasMany('Customer');
 
-		$this->assertEqual($node->relationships(), array('customers'));
-		$this->assertEqual($node->relationship('customers')->type, 'many');
+		$this->assertEquals($node->relationships(), array('customers'));
+		$this->assertEquals($node->relationship('customers')->type, 'many');
 	}
 
 	public function testOneRelationships()
@@ -24,8 +24,8 @@ class Relax_Client_NodeTest extends UnitTestCase
 		$node = new Relax_Client_Model('Root',$this->connection);
 		$node->hasOne('Customer');
 
-		$this->assertEqual($node->relationships(), array('customer'));
-		$this->assertEqual($node->relationship('customer')->type, 'one');
+		$this->assertEquals($node->relationships(), array('customer'));
+		$this->assertEquals($node->relationship('customer')->type, 'one');
 	}
 
 	public function testMissingRelationshipsCauseExceptions()

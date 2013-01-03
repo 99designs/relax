@@ -15,15 +15,17 @@ class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
 
 	private $_keys;
 	private $_access_id;
+	private $_time_func;
 
 	/**
 	 * @param array $keys { access_id: secret, ... }
 	 * @param string $access_id Access ID to use for signing, not used by verify().
 	 */
-	public function __construct($keys, $access_id = null)
+	public function __construct($keys, $access_id = null, $time_func = null)
 	{
 		$this->_keys = $keys;
 		$this->_access_id = $access_id;
+		$this->_time_func = $time_func ?: function() { return Ergo::time(); };
 	}
 
 	// ----------------------------------------
@@ -90,7 +92,7 @@ class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
 
 		// Add Date header if it's missing.
 		if (!$headers->value('Date'))
-			$headers->add('Date: ' . gmdate(self::DATE_FORMAT, Ergo::time()));
+			$headers->add('Date: ' . gmdate(self::DATE_FORMAT, call_user_func($this->_time_func)));
 
 		// Add Content-MD5 if it's missing and there's a body.
 		if (!$headers->value('Content-MD5') && $request->getBody())

@@ -3,7 +3,7 @@
 /**
  * @author Lachlan Donald <lachlan@99designs.com>
  */
-class Relax_Client_CollectionTest extends UnitTestCase
+class Relax_Client_CollectionTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
@@ -26,9 +26,9 @@ class Relax_Client_CollectionTest extends UnitTestCase
 			$customers[] = $customer;
 		}
 
-		$this->assertEqual(2, count($customers));
-		$this->assertEqual($customers[0]->name,'Testy McTesterson');
-		$this->assertEqual($customers[1]->name,'Screech');
+		$this->assertEquals(2, count($customers));
+		$this->assertEquals($customers[0]->name,'Testy McTesterson');
+		$this->assertEquals($customers[1]->name,'Screech');
 	}
 
 	public function testArrayAccess()
@@ -36,9 +36,9 @@ class Relax_Client_CollectionTest extends UnitTestCase
 		$node = new Relax_Client_Node('Customer',$this->connection);
 		$collection = new Relax_Client_Collection($node, 'customers');
 
-		$this->assertEqual(2, count($collection));
-		$this->assertEqual($collection[0]->name,'Testy McTesterson');
-		$this->assertEqual($collection[1]->name,'Screech');
+		$this->assertEquals(2, count($collection));
+		$this->assertEquals($collection[0]->name,'Testy McTesterson');
+		$this->assertEquals($collection[1]->name,'Screech');
 	}
 }
 

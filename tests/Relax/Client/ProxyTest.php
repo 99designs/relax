@@ -1,51 +1,54 @@
 <?php
 
-Mock::generate('Relax_Client_Connection','Relax_Client_MockConnection');
-
-/**
- * @author Lachlan Donald <lachlan@99designs.com>
- */
-class Relax_Client_ProxyTest extends UnitTestCase
+class Relax_Client_ProxyTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		$this->connection = new Relax_Client_MockConnection();
+		$this->connection = Mockery::mock();
 		//$this->model =  new Relax_Client_Model(new Commerce_LoggingConnection($this->connection));
 		$this->model = new Relax_Client_Model($this->connection);
 	}
 
 	public function testCollectionSelector()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->setReturnValue('get',(object) array(
-			'id'=>1,
-			'name'=>'apple'
-			), array('fruits/1'));
+		$this->connection
+			->shouldReceive('get')
+			->andReturn((object) array(
+				'id'=>1,
+				'name'=>'apple'
+			), array('fruits/1'))
+			->once();
 
-		$this->assertEqual($this->model->fruits(1)->name,'apple');
+		$this->assertEquals($this->model->fruits(1)->name,'apple');
 	}
 
 	public function testNestedCollections()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->setReturnValue('get',array(
-			(object) array('id'=>1,'street'=>'48 Cambridge St'),
-			(object) array('id'=>2,'street'=>'424 Smith St'),
-			), array('people/1/addresses'));
+		$this->connection
+			->shouldReceive('get')
+			->andReturn(array(
+				(object) array('id'=>1,'street'=>'48 Cambridge St'),
+				(object) array('id'=>2,'street'=>'424 Smith St'),
+			), array('people/1/addresses'))
+			->once()
+			;
 
 		$collection = $this->model->people(1)->addresses();
 
-		$this->assertEqual($collection->count(),2);
-		$this->assertEqual($collection[0]->street,'48 Cambridge St');
+		$this->assertEquals($collection->count(),2);
+		$this->assertEquals($collection[0]->street,'48 Cambridge St');
 	}
 
 	public function testIteratingCollections()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->setReturnValue('get',array(
-			(object) array('id'=>1,'street'=>'48 Cambridge St'),
-			(object) array('id'=>2,'street'=>'424 Smith St'),
-			), array('people/1/addresses'));
+		$this->connection
+			->shouldReceive('get')
+			->andReturn(array(
+				(object) array('id'=>1,'street'=>'48 Cambridge St'),
+				(object) array('id'=>2,'street'=>'424 Smith St'),
+			), array('people/1/addresses'))
+			->once()
+			;
 
 		$collection = $this->model->people(1)->addresses();
 		$counter = 0;
@@ -55,33 +58,39 @@ class Relax_Client_ProxyTest extends UnitTestCase
 			$counter++;
 		}
 
-		$this->assertEqual(2, $counter);
+		$this->assertEquals(2, $counter);
 	}
 
 	public function testTopLevelResource()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->setReturnValue('get',(object) array(
-			'id'=>1,
-			'name'=>'apple'
-			), array('fruit'));
+		$this->connection
+			->shouldReceive('get')
+			->andReturn((object) array(
+				'id'=>1,
+				'name'=>'apple'
+			), array('fruit'))
+			->once();
 
-		$this->assertEqual($this->model->fruit()->name,'apple');
+		$this->assertEquals($this->model->fruit()->name,'apple');
 	}
 
 	public function testSavingAResource()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->expectOnce('put',array('things/1/fruits/5','*'));
-		$this->connection->setReturnValue('get',array(
-			(object)array(
-				'id'=>5,
-				'name'=>'apple'
-				)
-			), array('things/1/fruits'));
+		$this->connection
+			->shouldReceive('put')->with('things/1/fruits/5',\Mockery::any())->once();
+
+		$this->connection
+			->shouldReceive('get')
+			->with('things/1/fruits')
+			->andReturn(array(
+				(object)array(
+					'id'=>5,
+					'name'=>'apple'
+				)))
+			->once();
 
 		$apple = $this->model->things(1)->fruits()->first();
-		$this->assertEqual($apple->name,'apple');
+		$this->assertEquals($apple->name,'apple');
 
 		$apple->name = 'pear';
 		$apple->save();
@@ -89,33 +98,45 @@ class Relax_Client_ProxyTest extends UnitTestCase
 
 	public function testLongChains()
 	{
-		$this->connection->expectOnce('get');
-		$this->connection->setReturnValue('get',(object) array(
-			'id'=>1,
-			'name'=>'apple'
-			), array('things/with/stuff/1/fruits'));
+		$this->connection
+			->shouldReceive('get')
+			->with('things/with/stuff/1/fruits')
+			->andReturn((object) array(
+				'id'=>1,
+				'name'=>'apple'
+			))
+			->once();
 
 		$apple = $this->model->things()->with()->stuff(1)->fruits();
-		$this->assertEqual($apple->name, 'apple');
+		$this->assertEquals($apple->name, 'apple');
 	}
 
 	public function testStringCollectionIdentifiers()
 	{
-		$this->connection->expectOnce('post');
-		$this->connection->setReturnValue('post',(object) array(
-			'id'=>'1',
-			'key'=>'value'
-			), array('things/1/fruits/apple/keys','*'));
-		$this->connection->setReturnValue('get',(object) array(
-			'id'=>'1',
-			'color'=>'red',
-			), array('things/1/fruits/apple'));
+		$this->connection
+			->shouldReceive('post')
+			->with('things/1/fruits/apple/keys',\Mockery::any())
+			->andReturn((object) array(
+				'id'=>'1',
+				'key'=>'value'
+			), array())
+			->once()
+			;
+
+		$this->connection
+			->shouldReceive('get')
+			->with('things/1/fruits/apple')
+			->andReturn((object) array(
+				'id'=>'1',
+				'color'=>'red',
+			))
+			->once();
 
 		// things/1/fruits/apple
 		$apple = $this->model->things(1)->fruits('apple');
 
 		// things/1/fruits/apple { id: 1, color:red }
-		$this->assertEqual($apple->color, 'red');
+		$this->assertEquals($apple->color, 'red');
 
 		// things/1/fruits/apple
 		$apple->keys()->create(array(
@@ -125,15 +146,18 @@ class Relax_Client_ProxyTest extends UnitTestCase
 
 	public function testCreateResourceInCollection()
 	{
-		$this->connection->expectOnce('post');
-		$this->connection->expectNever('get');
-		$this->connection->setReturnValue('post',(object) array(
-			'id'=>'5',
-			'key'=>'value'
-			), array('things','*'));
+		$this->connection->shouldReceive('get')->never();
+		$this->connection->shouldReceive('post')
+			->with('things', \Mockery::any())
+			->andReturn((object) array(
+				'id'=>'5',
+				'key'=>'value'
+			))
+			->once()
+			;
 
 		$newThing = $this->model->things()->create(array('key' => 'value'));
-		$this->assertEqual($newThing->key, 'value');
+		$this->assertEquals($newThing->key, 'value');
 	}
 }
 

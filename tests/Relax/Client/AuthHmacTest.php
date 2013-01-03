@@ -3,14 +3,19 @@
 /**
  * @author Paul Annesley
  */
-class Relax_Client_AuthHmacTest extends UnitTestCase
+class Relax_Client_AuthHmacTest extends PHPUnit_Framework_TestCase
 {
+	function setUp()
+	{
+		// a known-good date and header for this request signed with "the_secret"
+		$this->timeFunc = function() {
+			return strtotime("Tue, 22 Feb 2011 00:00:00 GMT");
+		};
+	}
+
 	function test_sign_and_verify_request()
 	{
 		$request = $this->_request('POST', '/path', "the\nbody");
-
-		// a known-good date and header for this request signed with "the_secret"
-		Ergo::application()->setDateTime(new DateTime("Tue, 22 Feb 2011 00:00:00 GMT"));
 		$expected_header = 'AuthHMAC test:jdVqXv9UZGWktvk/3YGx8dktjLc=';
 
 		$filter = $this->_filter();
@@ -18,15 +23,15 @@ class Relax_Client_AuthHmacTest extends UnitTestCase
 
 		$headers = $request->getHeaders();
 
-		$this->assertEqual($headers->value('Authorization'), $expected_header);
-		$this->assertTrue($headers->value('Date'));
+		$this->assertEquals($headers->value('Authorization'), $expected_header);
+		$this->assertEquals($headers->value('Date'), 'Tue, 22 Feb 2011 00:00:00 GMT');
 
 		$this->assertTrue($filter->verify($request), '%s: $filter->verify($request)');
 	}
 
 	function test_sign_without_access_id_fails()
 	{
-		$filter = new Relax_Openssl_AuthHmac(array("test" => "the_secret"));
+		$filter = new Relax_Openssl_AuthHmac(array("test" => "the_secret"), NULL, $this->timeFunc);
 		$this->_expectSigningException();
 		$filter->request($this->_request());
 	}
@@ -61,9 +66,8 @@ class Relax_Client_AuthHmacTest extends UnitTestCase
 
 	private function _filter()
 	{
-		return new Relax_Openssl_AuthHmac(
-			array("test" => "the_secret"),
-			"test"
+		return new Relax_Openssl_AuthHmac(array("test" => "the_secret"), "test",
+			$this->timeFunc
 		);
 	}
 
@@ -82,7 +86,7 @@ class Relax_Client_AuthHmacTest extends UnitTestCase
 
 	private function _expectSigningException($request = null)
 	{
-		$this->expectException('Relax_Openssl_SigningException');
+		$this->setExpectedException('Relax_Openssl_SigningException');
 		if ($request) $this->_filter()->verify($request);
 	}
 }

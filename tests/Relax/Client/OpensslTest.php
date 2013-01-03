@@ -1,27 +1,18 @@
 <?php
 
-Mock::generate('Relax_Openssl_KeyStore','Relax_Openssl_MockKeyStore');
-Mock::generate('Relax_Openssl_PublicKey','Relax_Openssl_MockPublicKey');
-Mock::generate('Relax_Openssl_PrivateKey','Relax_Openssl_MockPrivateKey');
-
-/**
- * @author Lachlan Donald <lachlan@99designs.com>
- */
-class Relax_OpensslTest extends UnitTestCase
+class Relax_OpensslTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
-		$this->privateKey = new Relax_Openssl_MockPrivateKey();
-		$this->publicKey = new Relax_Openssl_MockPublicKey();
-		$this->keyStore = new Relax_Openssl_MockKeyStore();
+		$this->privateKey = Mockery::mock();
+		$this->publicKey = Mockery::mock();
+		$this->keyStore = Mockery::mock();
 	}
 
 	public function testSigningARequest()
 	{
-		$this->privateKey->setReturnValue('getKeyId','test');
-		$this->privateKey->setReturnValue('sign','hash');
-
-		$this->privateKey->expectOnce('sign');
+		$this->privateKey->shouldReceive('getKeyId')->andReturn('test');
+		$this->privateKey->shouldReceive('sign')->andReturn('hash')->once();
 
 		$signer = new Relax_Openssl_Signer($this->privateKey, null, 10);
 		$headers = $signer->sign('GET','/test');
@@ -33,11 +24,9 @@ class Relax_OpensslTest extends UnitTestCase
 
 	public function testVerifyingARequest()
 	{
-		$this->publicKey->setReturnValue('getKeyId','test');
-		$this->publicKey->setReturnValue('verify',true);
-		$this->publicKey->expectOnce('verify');
-		$this->keyStore->setReturnValue('get',$this->publicKey);
-		$this->keyStore->expectOnce('get',array('test'));
+		$this->publicKey->shouldReceive('getKeyId')->andReturn('test');
+		$this->publicKey->shouldReceive('verify')->andReturn(true)->once();
+		$this->keyStore->shouldReceive('get')->with('test')->andReturn($this->publicKey)->once();
 
 		$headers = array(
 			'X-Signature-Hash: testhash',

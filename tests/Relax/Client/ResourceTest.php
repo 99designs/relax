@@ -3,7 +3,7 @@
 /**
  * @author Lachlan Donald <lachlan@99designs.com>
  */
-class Relax_Client_ResourceTest extends UnitTestCase
+class Relax_Client_ResourceTest extends PHPUnit_Framework_TestCase
 {
 	public function setUp()
 	{
@@ -22,25 +22,25 @@ class Relax_Client_ResourceTest extends UnitTestCase
 
 	public function testUrlBuilding()
 	{
-		$this->assertEqual($this->resource->url(), 'test/55');
+		$this->assertEquals($this->resource->url(), 'test/55');
 	}
 
 	public function testPropertyAccess()
 	{
-		$this->assertEqual($this->resource->name,'Testy McTesterson');
+		$this->assertEquals($this->resource->name,'Testy McTesterson');
 		$this->resource->blargh = 'blargh';
-		$this->assertEqual($this->resource->blargh,'blargh');
+		$this->assertEquals($this->resource->blargh,'blargh');
 	}
 
 	public function testNullPropertyAccess()
 	{
 		$this->assertFalse(isset($this->resource->optional));
-		$this->assertEqual($this->resource->optional, null);
+		$this->assertEquals($this->resource->optional, null);
 	}
 
 	public function testMissingPropertyAccess()
 	{
-		$this->expectException('BadMethodCallException');
+		$this->setExpectedException('BadMethodCallException');
 		$this->resource->doesnotexist;
 	}
 
