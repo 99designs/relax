@@ -13,6 +13,11 @@ class Relax_Openssl_PrivateKey
 		$this->_passphrase = $passphrase;
 	}
 
+  function isValid()
+  {
+    return $this->_getKeyResource() !== false;
+  }
+
 	function getKeyId()
 	{
 		return $this->_keyId;
