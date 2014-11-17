@@ -164,9 +164,6 @@ class Relax_Client_Resource
 
         $rel = $this->_node->relationship($method);
 
-        //Ergo::loggerFor($this)->info("dispatching $method(%s) to static relation %s",
-        //	(isset($params[0]) ? $params[0] : 'none'), $rel->type);
-
         // dispatch static relationships
         if ($rel->type == Relax_Client_Node::REL_ONE) {
             return $rel->node->resource($this->url(),$method);
