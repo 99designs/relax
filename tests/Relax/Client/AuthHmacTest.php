@@ -8,6 +8,7 @@ class Relax_Client_AuthHmacTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         // a known-good date and header for this request signed with "the_secret"
+        date_default_timezone_set('UTC');
         $this->timeFunc = function() {
             return strtotime("Tue, 22 Feb 2011 00:00:00 GMT");
         };

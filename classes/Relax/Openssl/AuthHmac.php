@@ -25,7 +25,7 @@ class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
     {
         $this->_keys = $keys;
         $this->_access_id = $access_id;
-        $this->_time_func = $time_func ?: function() { return Ergo::time(); };
+        $this->_time_func = $time_func ?: function() { return date("U"); };
     }
 
     // ----------------------------------------
