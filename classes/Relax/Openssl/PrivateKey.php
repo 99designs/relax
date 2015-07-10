@@ -38,6 +38,11 @@ class Relax_Openssl_PrivateKey
         return $hash;
     }
 
+    public function isValid()
+    {
+        return $this->_getKeyResource() !== false;
+    }
+
     private function _getKeyResource()
     {
         if (!is_file($this->_path)) {
