@@ -4,10 +4,12 @@
  * Signs and verifies HTTP requests using HMAC.
  * Based on (and compatible with) the Ruby AuthHMAC library.
  *
+ * Implicitly implements \Ergo\Http\ClientFilter and Ergo_Http_ClientFilter.
+ *
  * @see http://auth-hmac.rubyforge.org/
  * @author Paul Annesley
  */
-class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
+class Relax_Openssl_AuthHmac
 {
     const HEADER_NAME = 'Authorization';
     const SERVICE_ID = 'AuthHMAC';
@@ -44,10 +46,15 @@ class Relax_Openssl_AuthHmac implements \Ergo\Http\ClientFilter
 
         $signature = $this->_signature_for_request($request, $secret);
 
-        $request->getHeaders()->add(new \Ergo\Http\HeaderField(
-            self::HEADER_NAME,
-            sprintf('%s %s:%s', self::SERVICE_ID, $this->_access_id, $signature)
-        ));
+        $request->getHeaders()->add(
+            sprintf(
+                '%s: %s %s:%s',
+                self::HEADER_NAME,
+                self::SERVICE_ID,
+                $this->_access_id,
+                $signature
+            )
+        );
 
         return $request;
     }

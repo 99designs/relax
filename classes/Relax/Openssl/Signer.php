@@ -3,8 +3,10 @@
 /**
  * Signs a request's components using a public key. Throws signing exceptions
  * for requests that aren't valid.
+ *
+ * Implicitly implements \Ergo\Http\ClientFilter and Ergo_Http_ClientFilter.
  */
-class Relax_Openssl_Signer implements \Ergo\Http\ClientFilter
+class Relax_Openssl_Signer
 {
     const FUTURE_SANITY_THRESHOLD=5000;
 
